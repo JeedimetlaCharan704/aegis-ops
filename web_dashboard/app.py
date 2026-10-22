@@ -10,13 +10,19 @@ import sys
 import os
 
 # Ensure parent directory is in sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(CURRENT_DIR, "templates")
+STATIC_DIR = os.path.join(CURRENT_DIR, "static")
 
 from aegis_ops.agent.orchestrator import AegisSREAgent
 from aegis_ops.agent.chaos_engine import ChaosAlertStormEngine
 from aegis_ops.benchmarks.benchmark_runner import DeciderBenchmarkRunner
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 agent = AegisSREAgent()
 benchmark_runner = DeciderBenchmarkRunner()
 chaos_engine = ChaosAlertStormEngine(agent=agent)
