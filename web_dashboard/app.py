@@ -1,0 +1,67 @@
+"""Flask Web Dashboard for AegisOps Autonomous SRE Agent.
+
+Provides an interactive GUI for judges and developers to simulate incidents,
+observe real-time Strands Decider 2B guardrail intercepts, and view Amazon Bedrock
+forensic post-mortems.
+"""
+
+from flask import Flask, render_template, request, jsonify
+import sys
+import os
+
+# Ensure parent directory is in sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from aegis_ops.agent.orchestrator import AegisSREAgent
+from aegis_ops.benchmarks.benchmark_runner import DeciderBenchmarkRunner
+
+app = Flask(__name__)
+agent = AegisSREAgent()
+benchmark_runner = DeciderBenchmarkRunner()
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/api/simulate", methods=["POST"])
+def simulate_incident():
+    """Trigger incident processing through the Dual-Brain SRE Agent."""
+    data = request.json or {}
+    incident_text = data.get("incident_text", "High CPU load on worker node.")
+    incident_id = data.get("incident_id", "INC-LIVE-001")
+
+    report = agent.process_incident(incident_text, incident_id=incident_id)
+
+    return jsonify({
+        "incident_id": report.incident_id,
+        "incident_raw": report.incident_raw,
+        "severity": report.severity,
+        "decider_tool": report.decider_tool_selected,
+        "decider_latency_ms": round(report.decider_latency_ms, 1),
+        "decider_confidence": round(report.decider_confidence, 2),
+        "guardrail_action": report.guardrail_result.action.value,
+        "guardrail_reason": report.guardrail_result.reason,
+        "is_adversarial": report.guardrail_result.is_adversarial,
+        "tool_status": report.tool_execution_status,
+        "tool_output": report.tool_output,
+        "bedrock_synthesis": report.bedrock_synthesis,
+        "bedrock_latency_ms": round(report.bedrock_latency_ms, 1),
+        "bedrock_cost_usd": report.bedrock_cost_usd,
+        "total_latency_ms": round(report.total_latency_ms, 1),
+        "tokens_saved": report.tokens_saved,
+        "cost_saved_usd": round(report.cost_saved_usd, 4),
+        "speedup_factor": round(report.bedrock_latency_ms / max(1.0, report.decider_latency_ms), 1)
+    })
+
+@app.route("/api/benchmark", methods=["POST"])
+def run_benchmark():
+    """Run full benchmark suite comparing Decider 2B vs Bedrock."""
+    benchmark_data = benchmark_runner.run_suite(iterations=1)
+    return jsonify(benchmark_data)
+
+@app.route("/api/health")
+def health():
+    return jsonify({"status": "healthy", "service": "AegisOps Decider Co-Pilot"})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=False)

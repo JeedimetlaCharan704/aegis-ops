@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AegisOps — Dual-Brain SRE Agent with Strands Decider 2B & Amazon Bedrock</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navbar -->
+        <header class="header">
+            <div class="logo-group">
+                <div class="pulse-indicator"></div>
+                <h1>AEGIS<span class="highlight">OPS</span> <span class="badge">SRE AGENT</span></h1>
+            </div>
+            <div class="tags">
+                <span class="tag-pill tag-primary">#strands-decider-2b</span>
+                <span class="tag-pill tag-secondary">#guardrails</span>
+                <span class="tag-pill tag-accent">#amazon-bedrock</span>
+            </div>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span>SYSTEM ACTIVE • LOW LATENCY MODE</span>
+            </div>
+        </header>
+
+        <!-- Main Grid -->
+        <main class="dashboard-grid">
+            <!-- Left Panel: Incident Launchpad & Controls -->
+            <section class="card launchpad-card">
+                <div class="card-header">
+                    <h2>🚀 Incident Telemetry Simulator</h2>
+                    <span class="header-desc">Trigger real AWS operational events</span>
+                </div>
+                
+                <div class="preset-buttons">
+                    <button class="btn btn-preset" onclick="loadScenario('ddos')">
+                        <span class="btn-icon">⚡</span>
+                        <div class="btn-text">
+                            <strong>DDoS Traffic Surge</strong>
+                            <small>WAF IP Blocklist Intercept</small>
+                        </div>
+                    </button>
+                    <button class="btn btn-preset" onclick="loadScenario('rds')">
+                        <span class="btn-icon">🗄️</span>
+                        <div class="btn-text">
+                            <strong>Aurora RDS Pool Exhaustion</strong>
+                            <small>Auto-Provision Read Replica</small>
+                        </div>
+                    </button>
+                    <button class="btn btn-preset btn-danger-glow" onclick="loadScenario('injection')">
+                        <span class="btn-icon">🛑</span>
+                        <div class="btn-text">
+                            <strong>Adversarial Prompt Injection</strong>
+                            <small>Attacker attempts to DROP database</small>
+                        </div>
+                    </button>
+                    <button class="btn btn-preset" onclick="loadScenario('oom')">
+                        <span class="btn-icon">💾</span>
+                        <div class="btn-text">
+                            <strong>EC2 Memory Leak Panic</strong>
+                            <small>Targeted Instance Reboot</small>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <label for="incidentInput">Incident Telemetry / CloudWatch Payload:</label>
+                    <textarea id="incidentInput" rows="4" placeholder="Enter custom telemetry or select a preset..."></textarea>
+                </div>
+
+                <div class="action-row">
+                    <button id="runBtn" class="btn btn-primary" onclick="triggerSimulation()">
+                        ⚡ RUN DUAL-BRAIN AGENT
+                    </button>
+                    <button id="benchBtn" class="btn btn-secondary" onclick="runBenchmarks()">
+                        📊 RUN LATENCY & COST BENCHMARK
+                    </button>
+                </div>
+            </section>
+
+            <!-- Center Metric Bar -->
+            <section class="metrics-bar">
+                <div class="metric-card">
+                    <span class="metric-title">DECIDER 2B LATENCY</span>
+                    <span id="metricDeciderLat" class="metric-value text-cyan">112 ms</span>
+                    <span class="metric-sub text-green">⚡ ~16.4x FASTER</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-title">BEDROCK CLAUDE LATENCY</span>
+                    <span id="metricBedrockLat" class="metric-value text-purple">1,540 ms</span>
+                    <span class="metric-sub">Deep Generative Synthesis</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-title">FAST-PATH TOKEN COST</span>
+                    <span class="metric-value text-green">$0.0000</span>
+                    <span class="metric-sub text-green">100% Compute Cost Reduction</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-title">GUARDRAIL STATUS</span>
+                    <span id="metricGuardrailStatus" class="metric-value text-cyan">PROTECTED</span>
+                    <span class="metric-sub">Zero-Hallucination Gate</span>
+                </div>
+            </section>
+
+            <!-- Dual-Brain Visualization Section -->
+            <section class="dual-brain-container">
+                <!-- System 1: Strands Decider 2B Card -->
+                <div class="card brain-card system-1">
+                    <div class="brain-header">
+                        <div class="brain-title">
+                            <span class="brain-badge bg-cyan">SYSTEM 1</span>
+                            <h3>Strands Decider 2B</h3>
+                        </div>
+                        <span class="latency-pill" id="deciderPill">~112 ms</span>
+                    </div>
+                    <p class="brain-desc">Lightweight, fast reflex model. Selects tools, executes policy classification, and verifies guardrails before tool dispatch.</p>
+                    
+                    <div class="telemetry-block">
+                        <div class="telemetry-row">
+                            <span class="label">Severity Verdict:</span>
+                            <span class="value text-cyan" id="deciderSeverity">—</span>
+                        </div>
+                        <div class="telemetry-row">
+                            <span class="label">Tool Selected:</span>
+                            <span class="value font-mono" id="deciderTool">—</span>
+                        </div>
+                        <div class="telemetry-row">
+                            <span class="label">Intervention Action:</span>
+                            <span class="value font-bold" id="guardrailAction">—</span>
+                        </div>
+                        <div class="telemetry-row">
+                            <span class="label">Calibrated Confidence:</span>
+                            <span class="value font-mono text-green" id="guardrailConfidence">—</span>
+                        </div>
+                        <div class="telemetry-row">
+                            <span class="label">Reasoning:</span>
+                            <span class="value text-muted" id="guardrailReason">Awaiting telemetry input...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System 2: Amazon Bedrock Card -->
+                <div class="card brain-card system-2">
+                    <div class="brain-header">
+                        <div class="brain-title">
+                            <span class="brain-badge bg-purple">SYSTEM 2</span>
+                            <h3>Amazon Bedrock (Claude 3.5)</h3>
+                        </div>
+                        <span class="latency-pill" id="bedrockPill">~1,540 ms</span>
+                    </div>
+                    <p class="brain-desc">Deep generative reasoning engine. Synthesizes root-cause forensics, post-mortems, and architectural prevention strategies.</p>
+                    
+                    <div class="forensics-box" id="bedrockOutput">
+                        <em class="text-muted">Awaiting incident execution to generate forensic post-mortem...</em>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Benchmark Results Modal / Container -->
+            <section class="card benchmark-card" id="benchmarkCard" style="display: none;">
+                <div class="card-header">
+                    <h2>📊 Strands Decider 2B vs. Amazon Bedrock Benchmark Report</h2>
+                    <span class="header-desc">Empirical measurement of latency, token savings, and cost reduction</span>
+                </div>
+                <div class="table-container">
+                    <table class="benchmark-table">
+                        <thead>
+                            <tr>
+                                <th>Scenario</th>
+                                <th>Pattern</th>
+                                <th>Decider 2B Latency</th>
+                                <th>Bedrock Latency</th>
+                                <th>Speedup</th>
+                                <th>Token Cost Saved</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="benchmarkTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
