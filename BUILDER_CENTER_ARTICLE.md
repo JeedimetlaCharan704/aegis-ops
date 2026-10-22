@@ -3,7 +3,7 @@
 **Author:** Charan Jeedimetla  
 **Hackathon:** Agent Experience Hackathon: Strands Decider  
 **Tags:** `#strands-decider-2b`, `#guardrails`, `#tool-selection`, `#policy`, `#amazon-bedrock`  
-**GitHub Repository:** [https://github.com/charanjeedimetla/aegis-ops](https://github.com/charanjeedimetla/aegis-ops)  
+**GitHub Repository:** [https://github.com/JeedimetlaCharan704/aegis-ops](https://github.com/JeedimetlaCharan704/aegis-ops)  
 
 ---
 
@@ -149,7 +149,7 @@ Builders and operators can:
 
 ## 7. Try It Yourself
 
-* **Public Repository:** [https://github.com/charanjeedimetla/aegis-ops](https://github.com/charanjeedimetla/aegis-ops)
+* **Public Repository:** [https://github.com/JeedimetlaCharan704/aegis-ops](https://github.com/JeedimetlaCharan704/aegis-ops)
 * **Run CLI Demo:** `python run_demo.py`
 * **Run Benchmarks:** `python run_benchmarks.py`
 * **Launch Visual Dashboard:** `python web_dashboard/app.py`

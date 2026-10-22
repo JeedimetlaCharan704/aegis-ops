@@ -104,7 +104,7 @@ else:
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/charanjeedimetla/aegis-ops.git
+git clone https://github.com/JeedimetlaCharan704/aegis-ops.git
 cd aegis-ops
 pip install -r requirements.txt
 ```
