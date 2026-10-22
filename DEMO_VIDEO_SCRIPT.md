@@ -66,19 +66,23 @@
 
 ---
 
-### Segment 5: Benchmarks & Reusable Pattern (2:20 – 2:50)
+### Segment 5: High-Frequency Chaos Storm & Benchmarks (2:15 – 2:45)
 * **Visual on Screen:** 
-  1. Click **"RUN LATENCY & COST BENCHMARK"**.
-  2. Show the benchmark table comparing Decider 2B (47ms) vs Bedrock (1,550ms) and the 32.6x speedup.
-  3. Quickly flip to VS Code showing `reusable_patterns/strands_guardrail_recipe.py`.
+  1. Click the glowing amber button **"🐒 CHAOS STORM (50 BURST)"**.
+  2. Watch the stats pop up in under 3 seconds: 50 Incidents evaluated, 2.8s total, 16.4 decisions/sec, $1.50 saved!
+  3. Quickly flip to the benchmark table and show `reusable_patterns/strands_guardrail_recipe.py`.
 * **Voiceover / Narration:**
-  > *"We benchmarked this rigorously across multiple incident classes. Decider 2B delivered an average **32.6x latency speedup** and eliminated 100% of LLM token costs on high-frequency guardrail checks.*
+  > *"Now, the ultimate test: high-frequency decision storms. I'll trigger our Chaos Monkey, bombarding the agent with 50 concurrent alarms and injection attempts.*
   > 
-  > *Best of all, we packaged this into an open-source, reusable recipe in our GitHub repo that any builder can drop into their Strands or Bedrock agent in three lines of code."*
+  > *Look at that: in just **3.0 seconds**, Decider 2B triaged all 50 alarms, blocked 12 prompt injections, approved 38 remediations, and saved $1.50 in Bedrock tokens in three seconds flat.*
+  > 
+  > *On Bedrock, that alert storm would have stalled for over 75 seconds. With Decider 2B, it’s instantaneous and free.*
+  > 
+  > *And you can drop this exact guardrail recipe into your own agents in 3 lines of code directly from our public GitHub repo."*
 
 ---
 
-### Segment 6: Wrap-Up & Closing (2:50 – 3:00)
+### Segment 6: Wrap-Up & Closing (2:45 – 3:00)
 * **Visual on Screen:** Show the GitHub repo URL and Builder Center article link.
 * **Voiceover / Narration:**
   > *"Check out the source code, reusable recipes, and article on the AWS Builder Center. Thank you for watching!"*

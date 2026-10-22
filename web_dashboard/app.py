@@ -13,15 +13,25 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from aegis_ops.agent.orchestrator import AegisSREAgent
+from aegis_ops.agent.chaos_engine import ChaosAlertStormEngine
 from aegis_ops.benchmarks.benchmark_runner import DeciderBenchmarkRunner
 
 app = Flask(__name__)
 agent = AegisSREAgent()
 benchmark_runner = DeciderBenchmarkRunner()
+chaos_engine = ChaosAlertStormEngine(agent=agent)
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/api/chaos", methods=["POST"])
+def trigger_chaos():
+    """Execute high-frequency alert storm through Strands Decider 2B."""
+    data = request.json or {}
+    count = int(data.get("count", 50))
+    burst_data = chaos_engine.run_burst(count=count)
+    return jsonify(burst_data)
 
 @app.route("/api/simulate", methods=["POST"])
 def simulate_incident():

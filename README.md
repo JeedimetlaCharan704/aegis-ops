@@ -109,9 +109,13 @@ cd aegis-ops
 pip install -r requirements.txt
 ```
 
-### 2. Run the Interactive CLI Demo
+### 2. Run the Interactive CLI Demo & Chaos Storm
 ```bash
+# Run 3 primary operational incident scenarios
 python run_demo.py
+
+# Run High-Frequency Chaos Alert Storm (50 concurrent alarms in 3 seconds)
+python run_chaos.py
 ```
 
 ### 3. Launch the Visual Web Dashboard

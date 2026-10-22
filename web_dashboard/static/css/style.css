@@ -256,6 +256,51 @@ textarea:focus {
     background: #2d3748;
 }
 
+.btn-chaos {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #0b0f19;
+    font-weight: 700;
+}
+
+.btn-chaos:hover {
+    opacity: 0.9;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+
+.chaos-card {
+    border-top: 3px solid var(--amber);
+}
+
+.chaos-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.chaos-stat {
+    background: #0d121f;
+    border: 1px solid #242f47;
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chaos-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+}
+
+.chaos-val {
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+}
+
 /* Metrics Bar */
 .metrics-bar {
     display: grid;

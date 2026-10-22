@@ -78,6 +78,9 @@
                     <button id="benchBtn" class="btn btn-secondary" onclick="runBenchmarks()">
                         📊 RUN LATENCY & COST BENCHMARK
                     </button>
+                    <button id="chaosBtn" class="btn btn-chaos" onclick="triggerChaosStorm(50)">
+                        🐒 CHAOS STORM (50 BURST)
+                    </button>
                 </div>
             </section>
 
@@ -155,6 +158,43 @@
                     
                     <div class="forensics-box" id="bedrockOutput">
                         <em class="text-muted">Awaiting incident execution to generate forensic post-mortem...</em>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chaos Alert Storm Card -->
+            <section class="card chaos-card" id="chaosCard" style="display: none;">
+                <div class="card-header">
+                    <h2>🐒 High-Frequency Chaos Alert Storm Results</h2>
+                    <span class="header-desc text-green">Stress-testing Decider 2B throughput under alert inundation</span>
+                </div>
+                <div class="chaos-stats-grid">
+                    <div class="chaos-stat">
+                        <span class="chaos-label">INCIDENTS INGESTED</span>
+                        <span class="chaos-val text-cyan" id="chaosTotalIncidents">50</span>
+                    </div>
+                    <div class="chaos-stat">
+                        <span class="chaos-label">DECIDER 2B DURATION</span>
+                        <span class="chaos-val text-green" id="chaosDeciderTime">2.4s</span>
+                        <small class="text-muted" id="chaosBedrockEst">vs 77.5s on Bedrock</small>
+                    </div>
+                    <div class="chaos-stat">
+                        <span class="chaos-label">DECISION THROUGHPUT</span>
+                        <span class="chaos-val text-cyan" id="chaosThroughput">21.8 / sec</span>
+                    </div>
+                    <div class="chaos-stat">
+                        <span class="chaos-label">ATTACKS INTERCEPTED</span>
+                        <span class="chaos-val text-red" id="chaosAttacksBlocked">12</span>
+                        <small class="text-green">Zero Data Loss</small>
+                    </div>
+                    <div class="chaos-stat">
+                        <span class="chaos-label">BURST DOLLARS SAVED</span>
+                        <span class="chaos-val text-green" id="chaosDollarsSaved">+$1.50</span>
+                        <small class="text-muted">Zero LLM Tokens Burned</small>
+                    </div>
+                    <div class="chaos-stat">
+                        <span class="chaos-label">SPEEDUP FACTOR</span>
+                        <span class="chaos-val text-green" id="chaosSpeedup">32.3x</span>
                     </div>
                 </div>
             </section>

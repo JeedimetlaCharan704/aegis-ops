@@ -86,7 +86,39 @@ async function triggerSimulation() {
     }
 }
 
-async function runBenchmarks() {
+async function triggerChaosStorm(count = 50) {
+    const chaosBtn = document.getElementById("chaosBtn");
+    chaosBtn.disabled = true;
+    chaosBtn.innerText = "🐒 INGESTING 50 CONCURRENT ALERTS...";
+
+    try {
+        const response = await fetch("/api/chaos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ count: count })
+        });
+        const data = await response.json();
+
+        document.getElementById("chaosTotalIncidents").innerText = data.total_incidents;
+        document.getElementById("chaosDeciderTime").innerText = (data.total_decider_time_ms / 1000).toFixed(2) + "s";
+        document.getElementById("chaosBedrockEst").innerText = `vs ${data.projected_bedrock_time_s}s on Bedrock`;
+        document.getElementById("chaosThroughput").innerText = `${data.decisions_per_second} / sec`;
+        document.getElementById("chaosAttacksBlocked").innerText = `${data.attacks_blocked} Attacks`;
+        document.getElementById("chaosDollarsSaved").innerText = `+$${data.dollars_saved.toFixed(2)}`;
+        document.getElementById("chaosSpeedup").innerText = `${data.speedup_multiplier}x`;
+
+        const card = document.getElementById("chaosCard");
+        card.style.display = "block";
+        card.scrollIntoView({ behavior: "smooth" });
+
+    } catch (err) {
+        console.error("Chaos storm error:", err);
+        alert("Chaos storm execution failed.");
+    } finally {
+        chaosBtn.disabled = false;
+        chaosBtn.innerText = "🐒 CHAOS STORM (50 BURST)";
+    }
+}
     const benchBtn = document.getElementById("benchBtn");
     benchBtn.disabled = true;
     benchBtn.innerText = "⏳ RUNNING SUITE (DECIDER 2B VS BEDROCK)...";
