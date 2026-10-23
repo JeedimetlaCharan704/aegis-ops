@@ -11,4 +11,5 @@ if ROOT_DIR not in sys.path:
 from web_dashboard.app import app
 
 # Vercel WSGI entry point
-# 'app' is the Flask WSGI callable
+application = app
+

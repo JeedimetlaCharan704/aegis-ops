@@ -5,7 +5,7 @@ observe real-time Strands Decider 2B guardrail intercepts, and view Amazon Bedro
 forensic post-mortems.
 """
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import sys
 import os
 
@@ -22,24 +22,25 @@ from aegis_ops.agent.orchestrator import AegisSREAgent
 from aegis_ops.agent.chaos_engine import ChaosAlertStormEngine
 from aegis_ops.benchmarks.benchmark_runner import DeciderBenchmarkRunner
 
-app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
+app = Flask(
+    __name__,
+    template_folder=TEMPLATE_DIR,
+    static_folder=STATIC_DIR,
+    static_url_path="/static"
+)
 agent = AegisSREAgent()
 benchmark_runner = DeciderBenchmarkRunner()
 chaos_engine = ChaosAlertStormEngine(agent=agent)
 
 @app.route("/")
+@app.route("/api")
+@app.route("/api/index")
+@app.route("/index")
 def index():
     return render_template("index.html")
 
-@app.route("/api/chaos", methods=["POST"])
-def trigger_chaos():
-    """Execute high-frequency alert storm through Strands Decider 2B."""
-    data = request.json or {}
-    count = int(data.get("count", 50))
-    burst_data = chaos_engine.run_burst(count=count)
-    return jsonify(burst_data)
-
 @app.route("/api/simulate", methods=["POST"])
+@app.route("/simulate", methods=["POST"])
 def simulate_incident():
     """Trigger incident processing through the Dual-Brain SRE Agent."""
     data = request.json or {}
@@ -69,15 +70,33 @@ def simulate_incident():
         "speedup_factor": round(report.bedrock_latency_ms / max(1.0, report.decider_latency_ms), 1)
     })
 
+@app.route("/api/chaos", methods=["POST"])
+@app.route("/chaos", methods=["POST"])
+def trigger_chaos():
+    """Execute high-frequency alert storm through Strands Decider 2B."""
+    data = request.json or {}
+    count = int(data.get("count", 50))
+    burst_data = chaos_engine.run_burst(count=count)
+    return jsonify(burst_data)
+
 @app.route("/api/benchmark", methods=["POST"])
+@app.route("/benchmark", methods=["POST"])
 def run_benchmark():
     """Run full benchmark suite comparing Decider 2B vs Bedrock."""
     benchmark_data = benchmark_runner.run_suite(iterations=1)
     return jsonify(benchmark_data)
 
 @app.route("/api/health")
+@app.route("/health")
 def health():
     return jsonify({"status": "healthy", "service": "AegisOps Decider Co-Pilot"})
+
+@app.route("/<path:path>")
+def catch_all(path):
+    # Route static files if requested through catch-all
+    if path.startswith("static/"):
+        return send_from_directory(STATIC_DIR, path[7:])
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
