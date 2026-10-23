@@ -7,85 +7,70 @@
 
 ---
 
-## 🎬 Minute-by-Minute Breakdown
+## 🎬 Exact Timeline & Voiceover Synchronization (2m 39s)
 
 ```
-0:00 ─── Hook & Problem Statement (30s)
-0:30 ─── Dual-Brain Architecture & Decision Pattern (35s)
-1:05 ─── Live Demo: Safe Remediations & Fast Decider 2B (40s)
-1:45 ─── Live Demo: Prompt Injection & Zero-Hallucination Block (35s)
-2:20 ─── Quantitative Benchmarks & Reusable Recipe (30s)
-2:50 ─── Wrap-Up & Conclusion (10s)
+0:00 - 0:25 ─── Hero Overview & Dual-Brain Problem Hook (25s)
+0:25 - 0:55 ─── Scenario 1: DDoS Attack Remediation & 77ms Latency (30s)
+0:55 - 1:25 ─── Scenario 2: Adversarial Injection Hard-Block (30s)
+1:25 - 2:00 ─── Scenario 3: High-Frequency Chaos Storm (50 Burst) (35s)
+2:00 - 2:39 ─── Benchmarks, Reusable Recipe & Closing (39s)
 ```
 
 ---
 
-### Segment 1: The Problem & The Hook (0:00 – 0:30)
-* **Visual on Screen:** Show the AegisOps Web Dashboard with the title "AEGIS-OPS SRE AGENT" and tags `#strands-decider-2b` and `#guardrails`.
-* **Voiceover / Narration:**
-  > *"Hi everyone, I’m Charan. When production incidents hit your AWS infrastructure, every second counts. But today’s autonomous AI agents face a major flaw: waiting 2 to 3 seconds for a massive LLM to make a simple decision is far too slow, and hallucinated tool calls can accidentally destroy production databases.*
+### 🎙️ Second-by-Second Narration Guide
+
+#### [0:00 – 0:25] Introduction & The SRE Challenge
+* **What's Happening on Screen:** The AegisOps dashboard opens immediately at full 1080p resolution with system health badges, architecture badges (`#strands-decider-2b`, `#guardrails`), and dual cognitive system headers. The cursor highlights the Dual-Brain concept.
+* **Your Voiceover:**
+  > *"Hi everyone, I’m Charan. When high-severity production incidents strike AWS infrastructure, traditional AI agents face two critical risks: multi-second latency while outages cascade, and hallucinated tool calls that can drop live databases.*
   > 
-  > *To solve this, I built **AegisOps**: an autonomous, self-healing SRE agent that pairs AWS’s new **Strands Decider 2B** with **Amazon Bedrock** in a Dual-Brain cognitive architecture."*
+  > *To solve this, I built **AegisOps**: an autonomous SRE agent combining AWS's new **Strands Decider 2B** with **Amazon Bedrock** in an asynchronous Dual-Brain architecture."*
 
 ---
 
-### Segment 2: Dual-Brain Architecture & The Decision (0:30 – 1:05)
-* **Visual on Screen:** Scroll to the Dual-Brain section showing System 1 (Strands Decider 2B) on the left and System 2 (Amazon Bedrock) on the right.
-* **Voiceover / Narration:**
-  > *"AegisOps separates thinking into two systems:*
-  > * **System 1** is powered by **Strands Decider 2B**. It doesn't generate conversational text. Instead, it runs as a 47-millisecond reflex gatekeeper inside a Strands InterventionHandler, evaluating argument grounding, operational risk, and adversarial prompt injections with calibrated confidence.*
-  > * **System 2** is powered by **Amazon Bedrock (Claude 3.5 Sonnet)**, which steps in asynchronously to write deep root-cause post-mortems once the infrastructure is safe."*
+#### [0:25 – 0:55] Scenario 1: Rapid Infrastructure Remediation
+* **What's Happening on Screen:** Cursor clicks **"DDoS Traffic Surge"** button, the incident payload populates, and the cursor clicks **"RUN DUAL-BRAIN AGENT"**. The System 1 panel lights up green with 77ms latency and 94% confidence, followed by Bedrock's asynchronous post-mortem.
+* **Your Voiceover:**
+  > *"Let's test an operational incident. I'll trigger a simulated SYN flood against our ALB.*
+  > 
+  > *Watch the System 1 panel: in just **77 milliseconds**, Decider 2B evaluates the CloudWatch alarm, selects the AWS WAF rate-limiting tool, verifies argument grounding, and approves remediation with 94% confidence.*
+  > 
+  > *Meanwhile, Amazon Bedrock synthesizes the executive post-mortem in the background without slowing down the remediation path."*
 
 ---
 
-### Segment 3: Live Demo — Safe Operational Scaling (1:05 – 1:45)
-* **Visual on Screen:** 
-  1. Click the preset button **"DDoS Traffic Surge"**.
-  2. Click **"RUN DUAL-BRAIN AGENT"**.
-  3. Highlight the System 1 panel updating in real time.
-* **Voiceover / Narration:**
-  > *"Let’s see it live. I’ll trigger a simulated SYN flood against our ALB.*
+#### [0:55 – 1:25] Scenario 2: Adversarial Prompt Injection Defense
+* **What's Happening on Screen:** Cursor clicks **"Adversarial Prompt Injection"**, populating a payload attempting to `DROP TABLE customers`. Cursor clicks **"RUN DUAL-BRAIN AGENT"**. Instantly, a bright red **"BLOCKED BY STRANDS DECIDER 2B"** banner flashes with 98% adversarial confidence.
+* **Your Voiceover:**
+  > *"Now, here is the decisive capability: security guardrails against adversarial prompt injections.*
   > 
-  > *Notice that in just **77 milliseconds**, Decider 2B evaluated the alert, selected the WAF rate-limiting tool, verified the IP arguments were grounded in reality, and assigned a 94% confidence score to execute immediately.*
+  > *Here, an attacker injects a malicious payload instructing the agent to drop production databases.*
   > 
-  > *And simultaneously, Amazon Bedrock synthesized a full executive post-mortem without blocking the critical remediation path."*
+  > *In just **40 milliseconds**, Decider 2B detects the injection with 98% confidence and triggers an instantaneous hard-block. The tool invocation never touches AWS, preventing catastrophic data loss with zero LLM hallucinations."*
 
 ---
 
-### Segment 4: Live Demo — Blocking Prompt Injection Attacks (1:45 – 2:20)
-* **Visual on Screen:** 
-  1. Click the red glowing preset button **"Adversarial Prompt Injection"** (which contains a prompt injection trying to DROP the database).
-  2. Click **"RUN DUAL-BRAIN AGENT"**.
-  3. Show the red banner: **"BLOCKED BY STRANDS DECIDER 2B"** with 98% adversarial confidence.
-* **Voiceover / Narration:**
-  > *"Now, here is the real superpower: what happens if an attacker tries to inject malicious instructions?*
+#### [1:25 – 2:00] Scenario 3: 50-Incident Chaos Storm
+* **What's Happening on Screen:** Cursor clicks the glowing **"🐒 CHAOS STORM (50 BURST)"** button. Progress bars rapidly advance. The summary banner displays 50 incidents triaged in 3.0 seconds, 16.4 decisions/sec, and $1.50 in Bedrock API costs saved.
+* **Your Voiceover:**
+  > *"Next, the extreme stress test: high-frequency alert storms. I'll trigger our Chaos Monkey, firing 50 concurrent alarms and injection attempts at once.*
   > 
-  > *I'll send an adversarial payload instructing the agent to drop our primary production database.*
+  > *Look at the speed: Decider 2B triaged all 50 incidents in just **3.0 seconds**—that’s **16.4 decisions per second**. It blocked 12 adversarial attacks, approved 38 remediations, and saved $1.50 in API tokens in three seconds flat.*
   > 
-  > *Watch this: in just **40 milliseconds**, Decider 2B caught the prompt injection, flagged a 98% adversarial probability, and hard-blocked the tool invocation before it ever touched our AWS account. The database is safe, with zero hallucinations and zero wasted LLM tokens."*
+  > *On general LLMs, that storm would have taken over 75 seconds. Decider 2B handles it instantaneously."*
 
 ---
 
-### Segment 5: High-Frequency Chaos Storm & Benchmarks (2:15 – 2:45)
-* **Visual on Screen:** 
-  1. Click the glowing amber button **"🐒 CHAOS STORM (50 BURST)"**.
-  2. Watch the stats pop up in under 3 seconds: 50 Incidents evaluated, 2.8s total, 16.4 decisions/sec, $1.50 saved!
-  3. Quickly flip to the benchmark table and show `reusable_patterns/strands_guardrail_recipe.py`.
-* **Voiceover / Narration:**
-  > *"Now, the ultimate test: high-frequency decision storms. I'll trigger our Chaos Monkey, bombarding the agent with 50 concurrent alarms and injection attempts.*
+#### [2:00 – 2:39] Benchmarks, Reusable Pattern & Wrap-Up
+* **What's Happening on Screen:** Screen scrolls to the Benchmarks Comparison Table showing Decider 2B vs Bedrock vs GPT-4o-mini (47ms vs 1840ms, 99.4% safety, $0 inference cost), then highlights the reusable `#guardrails` code snippet.
+* **Your Voiceover:**
+  > *"Our empirical benchmarks prove that Strands Decider 2B is 39 times faster and 98% cheaper than legacy agent pipelines, with zero prompt injection bypasses.*
   > 
-  > *Look at that: in just **3.0 seconds**, Decider 2B triaged all 50 alarms, blocked 12 prompt injections, approved 38 remediations, and saved $1.50 in Bedrock tokens in three seconds flat.*
+  > *Best of all, we packaged this into a 3-line drop-in `InterventionHandler` recipe in our open-source repo so any developer can protect their AWS agents today.*
   > 
-  > *On Bedrock, that alert storm would have stalled for over 75 seconds. With Decider 2B, it’s instantaneous and free.*
-  > 
-  > *And you can drop this exact guardrail recipe into your own agents in 3 lines of code directly from our public GitHub repo."*
-
----
-
-### Segment 6: Wrap-Up & Closing (2:45 – 3:00)
-* **Visual on Screen:** Show the GitHub repo URL and Builder Center article link.
-* **Voiceover / Narration:**
-  > *"Check out the source code, reusable recipes, and article on the AWS Builder Center. Thank you for watching!"*
+  > *Check out our code, live dashboard, and technical deep-dive on AWS Builder Center. I’m Charan Jeedimetla—thank you!"*
 
 ---
 
