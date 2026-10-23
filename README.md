@@ -1,6 +1,7 @@
 # AegisOps: Autonomous Cloud SRE Agent with Strands Decider 2B & Amazon Bedrock
 
 [![Hackathon](https://img.shields.io/badge/AWS%20Hackathon-Strands%20Decider%202B-FF9900?logo=amazon-aws)](https://builder.aws.com/build/hackathons/4f50957c-1d08-37ab-b11c-97516b9adeb4/agent-experience-hackathon-strands-decider)
+[![Live Demo](https://img.shields.io/badge/Vercel-Live%20Demo-black?logo=vercel)](https://aegis-ops-livid.vercel.app/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.14-green.svg)](https://python.org)
 [![Pattern](https://img.shields.io/badge/Pattern-%23guardrails%20%7C%20%23tool--selection-purple.svg)](#reusable-decision-pattern)

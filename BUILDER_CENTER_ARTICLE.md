@@ -4,6 +4,7 @@
 **Hackathon:** Agent Experience Hackathon: Strands Decider  
 **Tags:** `#strands-decider-2b`, `#guardrails`, `#tool-selection`, `#policy`, `#amazon-bedrock`  
 **GitHub Repository:** [https://github.com/JeedimetlaCharan704/aegis-ops](https://github.com/JeedimetlaCharan704/aegis-ops)  
+**Live Interactive Dashboard:** [https://aegis-ops-livid.vercel.app/](https://aegis-ops-livid.vercel.app/)  
 
 ---
 
