@@ -5,7 +5,7 @@ observe real-time Strands Decider 2B guardrail intercepts, and view Amazon Bedro
 forensic post-mortems.
 """
 
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify
 import sys
 import os
 
@@ -29,79 +29,14 @@ app = Flask(
     static_url_path="/static"
 )
 
-# Vercel WSGI Proxy Middleware to restore original request URI
-class VercelPathMiddleware:
-    def __init__(self, wsgi_app):
-        self.wsgi_app = wsgi_app
-
-    def __call__(self, environ, start_response):
-        # 1. Check for __path parameter passed from vercel.json rewrite
-        query = environ.get("QUERY_STRING", "")
-        if "__path=" in query:
-            for part in query.split("&"):
-                if part.startswith("__path="):
-                    p = part.split("=", 1)[1]
-                    if p:
-                        environ["PATH_INFO"] = "/" + p.lstrip("/")
-                    else:
-                        environ["PATH_INFO"] = "/"
-                    break
-        else:
-            orig_path = environ.get("HTTP_X_FORWARDED_URI") or environ.get("HTTP_X_VERCEL_FORWARDED_PATH")
-            if orig_path:
-                if "?" in orig_path:
-                    orig_path = orig_path.split("?")[0]
-                environ["PATH_INFO"] = orig_path
-        return self.wsgi_app(environ, start_response)
-
-app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
-
 agent = AegisSREAgent()
 benchmark_runner = DeciderBenchmarkRunner()
 chaos_engine = ChaosAlertStormEngine(agent=agent)
 
 @app.route("/")
-@app.route("/api")
-@app.route("/api/index", methods=["GET", "POST"])
 @app.route("/index")
 def index():
-    path = (request.args.get("__path") or "").strip("/")
-    if path in ["api/health", "health"]:
-        return health()
-    if path in ["api/simulate", "simulate"]:
-        return simulate_incident()
-    if path in ["api/chaos", "chaos"]:
-        return trigger_chaos()
-    if path in ["api/benchmark", "benchmark"]:
-        return run_benchmark()
     return render_template("index.html")
-    if request.method == "POST":
-        data = request.get_json(silent=True) or {}
-        orig = (
-            request.environ.get("HTTP_X_FORWARDED_URI") or 
-            request.environ.get("HTTP_X_VERCEL_FORWARDED_PATH") or 
-            request.headers.get("x-matched-path") or 
-            request.path or ""
-        )
-        if "incident_text" in data or "simulate" in orig:
-            return simulate_incident()
-        elif "count" in data or "chaos" in orig:
-            return trigger_chaos()
-        elif "benchmark" in orig:
-            return run_benchmark()
-    return render_template("index.html")
-
-@app.route("/api/debug", methods=["GET", "POST"])
-@app.route("/debug", methods=["GET", "POST"])
-def debug_env():
-    return jsonify({
-        "path_info": request.environ.get("PATH_INFO"),
-        "x_forwarded_uri": request.environ.get("HTTP_X_FORWARDED_URI"),
-        "x_vercel_forwarded_path": request.environ.get("HTTP_X_VERCEL_FORWARDED_PATH"),
-        "x_matched_path": request.headers.get("x-matched-path"),
-        "headers": dict(request.headers),
-        "method": request.method
-    })
 
 @app.route("/api/simulate", methods=["POST"])
 @app.route("/simulate", methods=["POST"])
