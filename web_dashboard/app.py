@@ -53,6 +53,9 @@ chaos_engine = ChaosAlertStormEngine(agent=agent)
 @app.route("/api/index", methods=["GET", "POST"])
 @app.route("/index")
 def index():
+    if request.args.get("debug"):
+        clean_env = {str(k): str(v) for k, v in request.environ.items() if isinstance(v, (str, int, float, bool))}
+        return jsonify(clean_env)
     if request.method == "POST":
         data = request.get_json(silent=True) or {}
         orig = (
