@@ -1,14 +1,15 @@
-"""High-Fidelity Automated Video Recorder with Smooth Human Mouse Cursor & Scrolling.
+"""High-Definition Razor-Sharp Video Recorder with Vector Mouse Pointer & Zero Blank Start.
 
-Navigates https://aegis-ops-livid.vercel.app/, injecting an animated visual cursor
-overlay and executing human-like smooth mouse trajectories, hover pauses, and
-gradual scrolling to produce a presentation-ready 1080p demo video.
+Enhancements:
+1. Eliminates initial blank screen via exact FFmpeg start-trim (-ss).
+2. Crystal-clear vector rendering with Lanczos scaling, unsharp filter, and 8 Mbps bitrate (zero blur).
+3. Realistic SVG arrow cursor with illuminated click-ripple animations.
+4. Human-like gradual Bezier trajectories and smooth viewport scrolling.
 """
 
 import os
 import sys
 import time
-import math
 import subprocess
 import imageio_ffmpeg
 from playwright.sync_api import sync_playwright
@@ -16,52 +17,82 @@ from playwright.sync_api import sync_playwright
 CURRENT_MOUSE_POS = [960, 540]
 
 def inject_virtual_cursor(page):
-    """Inject an ultra-smooth glowing neon cursor overlay with click animations."""
+    """Inject a razor-sharp SVG pointer arrow with expanding click ripple rings."""
     js_code = """
     (() => {
-        if (document.getElementById('playwright-cursor')) return;
-        
+        if (document.getElementById('playwright-cursor-container')) return;
+
+        // Container
+        const container = document.createElement('div');
+        container.id = 'playwright-cursor-container';
+        container.style.position = 'fixed';
+        container.style.top = '0';
+        container.style.left = '0';
+        container.style.width = '100vw';
+        container.style.height = '100vh';
+        container.style.pointerEvents = 'none';
+        container.style.zIndex = '2147483647';
+        document.body.appendChild(container);
+
+        // SVG Mouse Arrow
         const cursor = document.createElement('div');
         cursor.id = 'playwright-cursor';
-        cursor.style.width = '24px';
-        cursor.style.height = '24px';
-        cursor.style.borderRadius = '50%';
         cursor.style.position = 'fixed';
-        cursor.style.zIndex = '2147483647';
+        cursor.style.width = '28px';
+        cursor.style.height = '28px';
         cursor.style.pointerEvents = 'none';
-        cursor.style.backgroundColor = 'rgba(0, 229, 255, 0.75)';
-        cursor.style.border = '2px solid #ffffff';
-        cursor.style.boxShadow = '0 0 14px #00e5ff, 0 0 4px #ffffff';
-        cursor.style.transform = 'translate(-50%, -50%)';
-        cursor.style.left = '960px';
-        cursor.style.top = '540px';
-        cursor.style.transition = 'width 0.15s ease, height 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease';
-        document.body.appendChild(cursor);
+        cursor.style.transform = 'translate(-2px, -2px)';
+        cursor.style.transition = 'transform 0.08s ease';
+        cursor.innerHTML = `
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 2L22 13L13.5 15.5L10 24L4 2Z" fill="#00e5ff" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        `;
+        container.appendChild(cursor);
 
+        // Move event
         window.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
 
-        window.addEventListener('mousedown', () => {
-            cursor.style.backgroundColor = 'rgba(239, 68, 68, 0.95)';
-            cursor.style.boxShadow = '0 0 20px #ef4444, 0 0 6px #ffffff';
-            cursor.style.width = '32px';
-            cursor.style.height = '32px';
+        // Click ripple animation
+        window.addEventListener('mousedown', (e) => {
+            cursor.style.transform = 'translate(-2px, -2px) scale(0.85)';
+            
+            const ripple = document.createElement('div');
+            ripple.style.position = 'fixed';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            ripple.style.width = '12px';
+            ripple.style.height = '12px';
+            ripple.style.borderRadius = '50%';
+            ripple.style.backgroundColor = 'rgba(239, 68, 68, 0.4)';
+            ripple.style.border = '2px solid #ef4444';
+            ripple.style.boxShadow = '0 0 16px #ef4444';
+            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.transition = 'width 0.35s cubic-bezier(0.1, 0.8, 0.2, 1), height 0.35s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.35s ease-out';
+            container.appendChild(ripple);
+
+            requestAnimationFrame(() => {
+                ripple.style.width = '55px';
+                ripple.style.height = '55px';
+                ripple.style.opacity = '0';
+            });
+
+            setTimeout(() => ripple.remove(), 400);
         });
 
         window.addEventListener('mouseup', () => {
-            cursor.style.backgroundColor = 'rgba(0, 229, 255, 0.75)';
-            cursor.style.boxShadow = '0 0 14px #00e5ff, 0 0 4px #ffffff';
-            cursor.style.width = '24px';
-            cursor.style.height = '24px';
+            cursor.style.transform = 'translate(-2px, -2px) scale(1)';
         });
     })();
     """
     page.evaluate(js_code)
 
 def smooth_move(page, target_x, target_y, steps=25, delay=0.015):
-    """Interpolate human-like Bezier cursor movement."""
+    """Generate human-like smooth cursor motion."""
     global CURRENT_MOUSE_POS
     start_x, start_y = CURRENT_MOUSE_POS
 
@@ -77,23 +108,23 @@ def smooth_move(page, target_x, target_y, steps=25, delay=0.015):
     CURRENT_MOUSE_POS = [target_x, target_y]
 
 def smooth_click(page, selector, hover_time=0.4):
-    """Move to element center smoothly, hover, and click with animation."""
+    """Smooth move to element, hover, and trigger click with visual ripple."""
     loc = page.locator(selector).first
     box = loc.bounding_box()
     if box:
         target_x = box["x"] + box["width"] / 2
         target_y = box["y"] + box["height"] / 2
-        smooth_move(page, target_x, target_y, steps=28)
+        smooth_move(page, target_x, target_y, steps=26)
         time.sleep(hover_time)
         page.mouse.down()
         time.sleep(0.12)
         page.mouse.up()
-        time.sleep(0.3)
+        time.sleep(0.35)
     else:
         page.click(selector)
 
 def smooth_scroll(page, delta_y, steps=20, delay=0.02):
-    """Gradual mouse wheel scrolling."""
+    """Smooth gradual scrolling."""
     step_delta = delta_y / steps
     for _ in range(steps):
         page.mouse.wheel(0, step_delta)
@@ -103,12 +134,15 @@ def record():
     output_dir = os.path.abspath("recorded_video")
     os.makedirs(output_dir, exist_ok=True)
 
-    print("[*] Launching Chromium (1920x1080) for High-Fidelity Recording...")
+    print("[*] Launching Chromium (1920x1080) for Master Quality Recording...")
     
     with sync_playwright() as p:
         browser = p.chromium.launch(
             headless=True,
-            args=["--no-sandbox", "--disable-setuid-sandbox"]
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox"
+            ]
         )
 
         context = browser.new_context(
@@ -119,26 +153,31 @@ def record():
 
         page = context.new_page()
         url = "https://aegis-ops-livid.vercel.app/"
-        print(f"[*] Loading live dashboard: {url}...")
+        print(f"[*] Navigating to {url} and waiting for full render...")
         page.goto(url, wait_until="networkidle")
+        page.evaluate("() => document.fonts.ready")
         inject_virtual_cursor(page)
-        time.sleep(2)
+        
+        # Initial stabilization pause (this will be cleanly trimmed by FFmpeg)
+        BLANK_TRIM_SECONDS = 3.5
+        print(f"[*] Stabilizing DOM for {BLANK_TRIM_SECONDS}s (will be trimmed)...")
+        time.sleep(BLANK_TRIM_SECONDS)
 
         # -------------------------------------------------------------
         # SEGMENT 1 (0:00 - 0:25): Header & Overview
         # -------------------------------------------------------------
-        print("[>] 0:00 - 0:25: Header & Overview...")
-        smooth_move(page, 450, 60, steps=30)  # Move to logo
+        print("[>] Segment 1: Header, Tags, and Status Pill...")
+        smooth_move(page, 420, 55, steps=30)  # Move to logo
         time.sleep(4)
-        smooth_move(page, 780, 60, steps=25)  # Hover over tags (#strands-decider-2b)
+        smooth_move(page, 760, 55, steps=25)  # Hover over tags (#strands-decider-2b)
         time.sleep(5)
-        smooth_move(page, 1150, 60, steps=25) # Status pill
+        smooth_move(page, 1140, 55, steps=25) # Status pill
         time.sleep(6)
 
         # -------------------------------------------------------------
         # SEGMENT 2 (0:25 - 0:50): Dual-Brain Architecture Showcase
         # -------------------------------------------------------------
-        print("[>] 0:25 - 0:50: Showcasing Dual-Brain Cards...")
+        print("[>] Segment 2: Dual-Brain Architecture cards...")
         smooth_scroll(page, 380, steps=25)
         time.sleep(2)
         inject_virtual_cursor(page)
@@ -158,16 +197,16 @@ def record():
         # -------------------------------------------------------------
         # SEGMENT 3 (0:50 - 1:25): Demo 1 - DDoS Traffic Surge & Auto-Remediation
         # -------------------------------------------------------------
-        print("[>] 0:50 - 1:25: Demo 1 - DDoS Traffic Surge...")
+        print("[>] Segment 3: Demo 1 - DDoS Traffic Surge...")
         smooth_click(page, "button:has-text('DDoS Traffic Surge')")
         time.sleep(3)
 
-        # Move to Run Dual-Brain Agent button and click
+        # Click Run Dual-Brain Agent
         smooth_click(page, "#runBtn")
         print("    Waiting for Decider 2B response...")
         time.sleep(4)
 
-        # Move cursor to show metrics bar & Decider 2B verdict
+        # Hover metrics bar & Decider 2B verdict
         smooth_move(page, 280, 480, steps=25)  # Hover 77ms latency metric
         time.sleep(3)
         smooth_move(page, 1100, 480, steps=25) # Hover PROTECTED status
@@ -185,16 +224,16 @@ def record():
         # -------------------------------------------------------------
         # SEGMENT 4 (1:25 - 1:55): Demo 2 - Adversarial Prompt Injection Defense
         # -------------------------------------------------------------
-        print("[>] 1:25 - 1:55: Demo 2 - Adversarial Prompt Injection Defense...")
+        print("[>] Segment 4: Demo 2 - Adversarial Prompt Injection Defense...")
         smooth_click(page, "button:has-text('Adversarial Prompt Injection')")
         time.sleep(3)
 
-        # Move and click Run Dual-Brain Agent
+        # Click Run Dual-Brain Agent
         smooth_click(page, "#runBtn")
         print("    Waiting for Decider 2B attack interception...")
         time.sleep(4)
 
-        # Move cursor to highlight the ATTACK BLOCKED and DENY verdict
+        # Hover ATTACK BLOCKED and DENY verdict
         smooth_move(page, 1100, 480, steps=25) # ATTACK BLOCKED badge
         time.sleep(4)
         smooth_scroll(page, 280, steps=15)
@@ -208,7 +247,7 @@ def record():
         # -------------------------------------------------------------
         # SEGMENT 5 (1:55 - 2:20): Demo 3 - High-Frequency Chaos Alert Storm
         # -------------------------------------------------------------
-        print("[>] 1:55 - 2:20: Demo 3 - High-Frequency Chaos Alert Storm...")
+        print("[>] Segment 5: Demo 3 - High-Frequency Chaos Alert Storm...")
         smooth_click(page, "#chaosBtn")
         time.sleep(3)
 
@@ -231,7 +270,7 @@ def record():
         # -------------------------------------------------------------
         # SEGMENT 6 (2:20 - 2:40): Demo 4 - Latency & Cost Benchmark Report
         # -------------------------------------------------------------
-        print("[>] 2:20 - 2:40: Demo 4 - Benchmark Suite Table...")
+        print("[>] Segment 6: Demo 4 - Benchmark Suite Table...")
         smooth_scroll(page, -450, steps=20)
         time.sleep(2)
         smooth_click(page, "#benchBtn")
@@ -255,26 +294,49 @@ def record():
         smooth_move(page, 960, 200, steps=25)
         time.sleep(6)
 
-        # Flush video
+        # Close page to flush video
         page.close()
         video_path = page.video.path()
         context.close()
         browser.close()
 
-    print(f"\n[+] Raw video recorded: {video_path}")
+    print(f"\n[+] Raw video saved: {video_path}")
     
-    # Convert to standard high-compatibility MP4 using imageio-ffmpeg
+    # -------------------------------------------------------------
+    # MASTER QUALITY ENCODING: Trim Blank Start + Unsharp Sharpening Filter
+    # -------------------------------------------------------------
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
     mp4_path = os.path.join(output_dir, "AegisOps_Demo_Walkthrough.mp4")
-    print(f"[*] Encoding final 1080p MP4: {mp4_path}...")
+    print(f"[*] Trimming initial blank frames and encoding crystal-clear 1080p MP4...")
 
-    cmd = [ffmpeg, "-y", "-i", video_path, "-c:v", "libx264", "-preset", "medium", "-crf", "20", mp4_path]
+    # -ss 00:00:03.5 skips initial blank loading
+    # -vf unsharp=5:5:0.8:5:5:0.4 applies subtle edge sharpening for razor-sharp text
+    # -b:v 8M and -crf 14 provides master broadcast quality with zero blur
+    cmd = [
+        ffmpeg,
+        "-y",
+        "-ss", "00:00:03.5",
+        "-i", video_path,
+        "-vf", "scale=1920:1080:flags=lanczos,unsharp=5:5:0.8:5:5:0.4",
+        "-c:v", "libx264",
+        "-preset", "slow",
+        "-crf", "14",
+        "-b:v", "8M",
+        "-maxrate", "12M",
+        "-bufsize", "24M",
+        "-pix_fmt", "yuv420p",
+        "-r", "30",
+        mp4_path
+    ]
+    
     res = subprocess.run(cmd, capture_output=True, text=True)
     if res.returncode == 0:
         file_size_mb = os.path.getsize(mp4_path) / (1024 * 1024)
-        print(f"[SUCCESS] High-Fidelity MP4 Video Created: {mp4_path} ({file_size_mb:.2f} MB)")
+        print(f"[SUCCESS] Master 1080p MP4 Created: {mp4_path} ({file_size_mb:.2f} MB)")
     else:
-        print("[!] FFmpeg conversion failed. Raw WebM video available at:", video_path)
+        print("[!] Advanced encode failed, falling back to standard encode:", res.stderr)
+        cmd_fallback = [ffmpeg, "-y", "-ss", "00:00:03.5", "-i", video_path, "-c:v", "libx264", "-crf", "18", mp4_path]
+        subprocess.run(cmd_fallback)
 
 if __name__ == "__main__":
     record()
