@@ -28,6 +28,22 @@ app = Flask(
     static_folder=STATIC_DIR,
     static_url_path="/static"
 )
+
+# Vercel WSGI Proxy Middleware to restore original request URI
+class VercelPathMiddleware:
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        orig_path = environ.get("HTTP_X_FORWARDED_URI") or environ.get("HTTP_X_VERCEL_FORWARDED_PATH")
+        if orig_path:
+            if "?" in orig_path:
+                orig_path = orig_path.split("?")[0]
+            environ["PATH_INFO"] = orig_path
+        return self.wsgi_app(environ, start_response)
+
+app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
+
 agent = AegisSREAgent()
 benchmark_runner = DeciderBenchmarkRunner()
 chaos_engine = ChaosAlertStormEngine(agent=agent)
