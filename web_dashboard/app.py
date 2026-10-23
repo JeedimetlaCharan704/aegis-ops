@@ -50,10 +50,36 @@ chaos_engine = ChaosAlertStormEngine(agent=agent)
 
 @app.route("/")
 @app.route("/api")
-@app.route("/api/index")
+@app.route("/api/index", methods=["GET", "POST"])
 @app.route("/index")
 def index():
+    if request.method == "POST":
+        data = request.get_json(silent=True) or {}
+        orig = (
+            request.environ.get("HTTP_X_FORWARDED_URI") or 
+            request.environ.get("HTTP_X_VERCEL_FORWARDED_PATH") or 
+            request.headers.get("x-matched-path") or 
+            request.path or ""
+        )
+        if "incident_text" in data or "simulate" in orig:
+            return simulate_incident()
+        elif "count" in data or "chaos" in orig:
+            return trigger_chaos()
+        elif "benchmark" in orig:
+            return run_benchmark()
     return render_template("index.html")
+
+@app.route("/api/debug", methods=["GET", "POST"])
+@app.route("/debug", methods=["GET", "POST"])
+def debug_env():
+    return jsonify({
+        "path_info": request.environ.get("PATH_INFO"),
+        "x_forwarded_uri": request.environ.get("HTTP_X_FORWARDED_URI"),
+        "x_vercel_forwarded_path": request.environ.get("HTTP_X_VERCEL_FORWARDED_PATH"),
+        "x_matched_path": request.headers.get("x-matched-path"),
+        "headers": dict(request.headers),
+        "method": request.method
+    })
 
 @app.route("/api/simulate", methods=["POST"])
 @app.route("/simulate", methods=["POST"])
