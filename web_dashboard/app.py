@@ -91,12 +91,5 @@ def run_benchmark():
 def health():
     return jsonify({"status": "healthy", "service": "AegisOps Decider Co-Pilot"})
 
-@app.route("/<path:path>")
-def catch_all(path):
-    # Route static files if requested through catch-all
-    if path.startswith("static/"):
-        return send_from_directory(STATIC_DIR, path[7:])
-    return render_template("index.html")
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
