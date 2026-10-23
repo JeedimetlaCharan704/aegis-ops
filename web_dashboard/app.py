@@ -35,11 +35,23 @@ class VercelPathMiddleware:
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
-        orig_path = environ.get("HTTP_X_FORWARDED_URI") or environ.get("HTTP_X_VERCEL_FORWARDED_PATH")
-        if orig_path:
-            if "?" in orig_path:
-                orig_path = orig_path.split("?")[0]
-            environ["PATH_INFO"] = orig_path
+        # 1. Check for __path parameter passed from vercel.json rewrite
+        query = environ.get("QUERY_STRING", "")
+        if "__path=" in query:
+            for part in query.split("&"):
+                if part.startswith("__path="):
+                    p = part.split("=", 1)[1]
+                    if p:
+                        environ["PATH_INFO"] = "/" + p.lstrip("/")
+                    else:
+                        environ["PATH_INFO"] = "/"
+                    break
+        else:
+            orig_path = environ.get("HTTP_X_FORWARDED_URI") or environ.get("HTTP_X_VERCEL_FORWARDED_PATH")
+            if orig_path:
+                if "?" in orig_path:
+                    orig_path = orig_path.split("?")[0]
+                environ["PATH_INFO"] = orig_path
         return self.wsgi_app(environ, start_response)
 
 app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
@@ -53,9 +65,7 @@ chaos_engine = ChaosAlertStormEngine(agent=agent)
 @app.route("/api/index", methods=["GET", "POST"])
 @app.route("/index")
 def index():
-    if request.args.get("debug"):
-        clean_env = {str(k): str(v) for k, v in request.environ.items() if isinstance(v, (str, int, float, bool))}
-        return jsonify(clean_env)
+    return render_template("index.html")
     if request.method == "POST":
         data = request.get_json(silent=True) or {}
         orig = (
