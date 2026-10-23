@@ -1,10 +1,15 @@
 # AegisOps: Building a Zero-Hallucination Autonomous SRE Agent with Strands Decider 2B and Amazon Bedrock
 
 **Author:** Charan Jeedimetla  
-**Hackathon:** Agent Experience Hackathon: Strands Decider  
+**Hackathon:** Agent Experience Hackathon: Strands Decider (Oct 16 - 23, 2026)  
 **Tags:** `#strands-decider-2b`, `#guardrails`, `#tool-selection`, `#policy`, `#amazon-bedrock`  
-**GitHub Repository:** [https://github.com/JeedimetlaCharan704/aegis-ops](https://github.com/JeedimetlaCharan704/aegis-ops)  
+**Video Walkthrough (YouTube):** [https://youtu.be/wBpUmVxX9Qs](https://youtu.be/wBpUmVxX9Qs)  
 **Live Interactive Dashboard:** [https://aegis-ops-livid.vercel.app/](https://aegis-ops-livid.vercel.app/)  
+**GitHub Repository:** [https://github.com/JeedimetlaCharan704/aegis-ops](https://github.com/JeedimetlaCharan704/aegis-ops)  
+
+---
+
+> 📺 **Video Walkthrough:** Watch the 2-minute 39-second demonstration of AegisOps in action on YouTube: **[https://youtu.be/wBpUmVxX9Qs](https://youtu.be/wBpUmVxX9Qs)**.
 
 ---
 
