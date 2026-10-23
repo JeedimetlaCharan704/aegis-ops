@@ -119,6 +119,8 @@ async function triggerChaosStorm(count = 50) {
         chaosBtn.innerText = "🐒 CHAOS STORM (50 BURST)";
     }
 }
+
+async function runBenchmarks() {
     const benchBtn = document.getElementById("benchBtn");
     benchBtn.disabled = true;
     benchBtn.innerText = "⏳ RUNNING SUITE (DECIDER 2B VS BEDROCK)...";
