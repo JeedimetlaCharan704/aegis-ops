@@ -65,6 +65,15 @@ chaos_engine = ChaosAlertStormEngine(agent=agent)
 @app.route("/api/index", methods=["GET", "POST"])
 @app.route("/index")
 def index():
+    path = (request.args.get("__path") or "").strip("/")
+    if path in ["api/health", "health"]:
+        return health()
+    if path in ["api/simulate", "simulate"]:
+        return simulate_incident()
+    if path in ["api/chaos", "chaos"]:
+        return trigger_chaos()
+    if path in ["api/benchmark", "benchmark"]:
+        return run_benchmark()
     return render_template("index.html")
     if request.method == "POST":
         data = request.get_json(silent=True) or {}
